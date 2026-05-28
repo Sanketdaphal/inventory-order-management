@@ -5,6 +5,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -15,6 +16,15 @@ export default function Dashboard() {
         ]);
         setStats(statsRes.data);
         setRecentOrders(ordersRes.data.slice(0, 5));
+        setError(null);
+      } catch (err) {
+        setStats(null);
+        setRecentOrders([]);
+        const message =
+          err.response?.data?.detail ||
+          err.message ||
+          'Cannot reach the backend API';
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -23,6 +33,27 @@ export default function Dashboard() {
   }, []);
 
   if (loading) return <div className="loading">Loading dashboard…</div>;
+
+  if (error || !stats) {
+    return (
+      <div>
+        <div className="page-header">
+          <h1 className="page-title">Dashboard</h1>
+        </div>
+        <div className="card" style={{ color: '#b91c1c' }}>
+          <p>
+            <strong>Could not load dashboard data.</strong>
+          </p>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>{error}</p>
+          <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 12 }}>
+            Check: (1) <code>REACT_APP_API_URL</code> on Vercel points to your Render URL,
+            then redeploy. (2) <code>CORS_ORIGINS</code> on Render includes this Vercel URL.
+            (3) Render backend is awake — open <code>/health</code> in a new tab.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -51,7 +82,7 @@ export default function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
         <div className="card">
           <h3 style={{ marginTop: 0 }}>Low Stock Products</h3>
-          {stats.low_stock_products.length === 0 ? (
+          {(stats.low_stock_products || []).length === 0 ? (
             <p className="empty-state">All products are well stocked.</p>
           ) : (
             <table>
