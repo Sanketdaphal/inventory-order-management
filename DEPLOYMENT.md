@@ -27,8 +27,8 @@ Alternatively use the included `render.yaml` blueprint from the Render dashboard
 
 ```bash
 docker login
-docker build -t sanketdaphal/inventory-backend:latest ./backend
-docker push sanketdaphal/inventory-backend:latest
+docker build -t sanketdaphal07/inventory-backend:latest ./backend
+docker push sanketdaphal07/inventory-backend:latest
 ```
 
 Update `README.md` submission table with your live URLs after deployment.

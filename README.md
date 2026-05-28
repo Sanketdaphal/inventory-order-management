@@ -6,10 +6,12 @@ Full-stack application for managing products, customers, orders, and inventory t
 
 | Deliverable | Link |
 |-------------|------|
-| GitHub Repository | https://github.com/Sanketdaphal/inventory-order-management |
-| Backend Docker Hub Image | `docker pull sanketdaphal/inventory-backend:latest` |
+| GitHub Repository | https://github.com/sanketdaphal07/inventory-order-management |
+| Backend Docker Hub Image | `docker pull sanketdaphal07/inventory-backend:latest` (push after `docker login`) |
 | Frontend (Vercel) | _Set after deploy — see [DEPLOYMENT.md](./DEPLOYMENT.md)_ |
 | Backend API (Render) | _Set after deploy — see [DEPLOYMENT.md](./DEPLOYMENT.md)_ |
+
+> **GitHub account note:** The repo is pushed to `sanketdaphal07` because that account is logged into `gh` on this machine. To host it under [Sanketdaphal](https://github.com/Sanketdaphal), run `gh auth login` as that user, create `inventory-order-management`, then `git remote set-url origin https://github.com/Sanketdaphal/inventory-order-management.git` and `git push -u origin master`.
 
 ## Tech Stack
 
@@ -104,6 +106,6 @@ npm start
 ## Docker Hub (Backend)
 
 ```bash
-docker build -t sanketdaphal/inventory-backend:latest ./backend
-docker push sanketdaphal/inventory-backend:latest
+docker build -t sanketdaphal07/inventory-backend:latest ./backend
+docker push sanketdaphal07/inventory-backend:latest
 ```
