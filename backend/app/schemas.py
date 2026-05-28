@@ -1,32 +1,16 @@
-from pydantic import BaseModel, EmailStr, field_validator
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
 from .models import OrderStatus
 
 
-# ─── Product Schemas ──────────────────────────────────────────────────────────
-
 class ProductBase(BaseModel):
-    name: str
-    sku: str
-    description: Optional[str] = None
-    price: float
-    stock_quantity: int = 0
-    category: Optional[str] = None
-
-    @field_validator("price")
-    @classmethod
-    def price_must_be_positive(cls, v):
-        if v < 0:
-            raise ValueError("Price must be non-negative")
-        return v
-
-    @field_validator("stock_quantity")
-    @classmethod
-    def stock_must_be_non_negative(cls, v):
-        if v < 0:
-            raise ValueError("Stock quantity must be non-negative")
-        return v
+    name: str = Field(..., min_length=1, max_length=255)
+    sku: str = Field(..., min_length=1, max_length=100)
+    price: float = Field(..., ge=0)
+    quantity_in_stock: int = Field(0, ge=0)
 
 
 class ProductCreate(ProductBase):
@@ -34,11 +18,9 @@ class ProductCreate(ProductBase):
 
 
 class ProductUpdate(BaseModel):
-    name: Optional[str] = None
-    description: Optional[str] = None
-    price: Optional[float] = None
-    stock_quantity: Optional[int] = None
-    category: Optional[str] = None
+    name: Optional[str] = Field(None, min_length=1, max_length=255)
+    price: Optional[float] = Field(None, ge=0)
+    quantity_in_stock: Optional[int] = Field(None, ge=0)
 
 
 class ProductResponse(ProductBase):
@@ -49,46 +31,26 @@ class ProductResponse(ProductBase):
     model_config = {"from_attributes": True}
 
 
-# ─── Customer Schemas ─────────────────────────────────────────────────────────
-
 class CustomerBase(BaseModel):
-    name: str
-    email: str
-    phone: Optional[str] = None
-    address: Optional[str] = None
+    full_name: str = Field(..., min_length=1, max_length=255)
+    email: EmailStr
+    phone: str = Field(..., min_length=1, max_length=50)
 
 
 class CustomerCreate(CustomerBase):
     pass
 
 
-class CustomerUpdate(BaseModel):
-    name: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    address: Optional[str] = None
-
-
 class CustomerResponse(CustomerBase):
     id: int
     created_at: datetime
-    updated_at: datetime
 
     model_config = {"from_attributes": True}
 
 
-# ─── Order Item Schemas ───────────────────────────────────────────────────────
-
 class OrderItemCreate(BaseModel):
     product_id: int
-    quantity: int
-
-    @field_validator("quantity")
-    @classmethod
-    def quantity_must_be_positive(cls, v):
-        if v <= 0:
-            raise ValueError("Quantity must be greater than zero")
-        return v
+    quantity: int = Field(..., gt=0)
 
 
 class OrderItemResponse(BaseModel):
@@ -101,17 +63,9 @@ class OrderItemResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# ─── Order Schemas ────────────────────────────────────────────────────────────
-
 class OrderCreate(BaseModel):
     customer_id: int
-    items: List[OrderItemCreate]
-    notes: Optional[str] = None
-
-
-class OrderUpdate(BaseModel):
-    status: Optional[OrderStatus] = None
-    notes: Optional[str] = None
+    items: List[OrderItemCreate] = Field(..., min_length=1)
 
 
 class OrderResponse(BaseModel):
@@ -119,10 +73,15 @@ class OrderResponse(BaseModel):
     customer_id: int
     status: OrderStatus
     total_amount: float
-    notes: Optional[str] = None
     created_at: datetime
-    updated_at: datetime
     customer: Optional[CustomerResponse] = None
     items: List[OrderItemResponse] = []
 
     model_config = {"from_attributes": True}
+
+
+class DashboardStats(BaseModel):
+    total_products: int
+    total_customers: int
+    total_orders: int
+    low_stock_products: List[ProductResponse]

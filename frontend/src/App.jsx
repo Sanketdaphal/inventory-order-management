@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { NavLink, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import Products from './pages/Products';
-import Customers from './pages/Customers';
-import Orders from './pages/Orders';
-import Dashboard from './pages/Dashboard';
+import Customers from './pages/Customers.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Orders from './pages/Orders.jsx';
+import Products from './pages/Products.jsx';
 import './App.css';
 
 function App() {
@@ -19,16 +19,16 @@ function App() {
           </div>
           <nav className="sidebar-nav">
             <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <span className="nav-icon">🏠</span> Dashboard
+              Dashboard
             </NavLink>
             <NavLink to="/products" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <span className="nav-icon">🛍️</span> Products
+              Products
             </NavLink>
             <NavLink to="/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <span className="nav-icon">👥</span> Customers
+              Customers
             </NavLink>
             <NavLink to="/orders" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-              <span className="nav-icon">📋</span> Orders
+              Orders
             </NavLink>
           </nav>
         </aside>

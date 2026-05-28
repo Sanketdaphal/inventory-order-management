@@ -1,15 +1,15 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Enum
-from sqlalchemy.orm import relationship
-from datetime import datetime
 import enum
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 from .database import Base
 
 
 class OrderStatus(str, enum.Enum):
     pending = "pending"
     confirmed = "confirmed"
-    shipped = "shipped"
-    delivered = "delivered"
     cancelled = "cancelled"
 
 
@@ -19,10 +19,8 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)
     sku = Column(String(100), unique=True, nullable=False, index=True)
-    description = Column(String(1000), nullable=True)
     price = Column(Float, nullable=False)
-    stock_quantity = Column(Integer, nullable=False, default=0)
-    category = Column(String(100), nullable=True)
+    quantity_in_stock = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -33,12 +31,10 @@ class Customer(Base):
     __tablename__ = "customers"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
+    full_name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    phone = Column(String(50), nullable=True)
-    address = Column(String(500), nullable=True)
+    phone = Column(String(50), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     orders = relationship("Order", back_populates="customer")
 
@@ -50,9 +46,7 @@ class Order(Base):
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     status = Column(Enum(OrderStatus), default=OrderStatus.pending, nullable=False)
     total_amount = Column(Float, nullable=False, default=0.0)
-    notes = Column(String(500), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     customer = relationship("Customer", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
