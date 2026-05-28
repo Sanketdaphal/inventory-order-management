@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 function resolveApiUrl() {
-  // Vercel: use same-origin proxy (vercel.json) to avoid CORS
-  if (import.meta.env.VERCEL === '1') return '/api';
-
-  const configured = (import.meta.env.REACT_APP_API_URL || '').trim().replace(/\/$/, '');
+  // Use VITE_API_URL if set (works on Vercel, Koyeb, Railway, etc.)
+  const configured = (
+    import.meta.env.VITE_API_URL || import.meta.env.REACT_APP_API_URL || ''
+  ).trim().replace(/\/$/, '');
   if (configured) return configured;
 
+  // Fallback: try the same-origin /api proxy
   if (import.meta.env.PROD) return '/api';
   return 'http://localhost:8000';
 }
