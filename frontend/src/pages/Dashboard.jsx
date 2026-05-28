@@ -49,9 +49,8 @@ export default function Dashboard() {
             API URL used by this build: <code>{API_URL}</code>
           </p>
           <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 8 }}>
-            If that shows <code>localhost</code>, set <code>REACT_APP_API_URL</code> on Vercel to{' '}
-            <code>https://inventory-order-management-gjmc.onrender.com</code> and redeploy (no cache).
-            On Render set <code>CORS_ORIGINS</code> to your Vercel URL or <code>*</code>, then redeploy backend.
+            Expected API path: <code>/api</code> (Vercel proxy) or your Render URL. Redeploy Vercel
+            after the latest GitHub push. Wake Render: open /health on Render first.
           </p>
         </div>
       </div>

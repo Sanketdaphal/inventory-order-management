@@ -7,6 +7,7 @@ from sqlalchemy.exc import OperationalError
 
 from .database import Base, engine
 from .routers import customers, dashboard, orders, products
+from .seed import seed_database
 
 app = FastAPI(
     title="Inventory & Order Management API",
@@ -47,6 +48,7 @@ def init_db():
 @app.on_event("startup")
 def on_startup():
     init_db()
+    seed_database()
 
 
 app.include_router(products.router)

@@ -1,13 +1,22 @@
 import axios from 'axios';
 
-export const API_URL =
-  import.meta.env.REACT_APP_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  'http://localhost:8000';
+function resolveApiUrl() {
+  // Vercel: use same-origin proxy (vercel.json) to avoid CORS
+  if (import.meta.env.VERCEL === '1') return '/api';
+
+  const configured = (import.meta.env.REACT_APP_API_URL || '').trim().replace(/\/$/, '');
+  if (configured) return configured;
+
+  if (import.meta.env.PROD) return '/api';
+  return 'http://localhost:8000';
+}
+
+export const API_URL = resolveApiUrl();
 
 const api = axios.create({
   baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
+  timeout: 60000,
 });
 
 export const getDashboardStats = () => api.get('/dashboard/stats');
