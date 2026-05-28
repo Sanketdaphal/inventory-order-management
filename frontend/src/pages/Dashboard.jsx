@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getDashboardStats, getOrders } from '../api';
+import { API_URL, getDashboardStats, getOrders } from '../api';
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -45,10 +45,13 @@ export default function Dashboard() {
             <strong>Could not load dashboard data.</strong>
           </p>
           <p style={{ color: '#64748b', fontSize: '0.9rem' }}>{error}</p>
-          <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 12 }}>
-            Check: (1) <code>REACT_APP_API_URL</code> on Vercel points to your Render URL,
-            then redeploy. (2) <code>CORS_ORIGINS</code> on Render includes this Vercel URL.
-            (3) Render backend is awake — open <code>/health</code> in a new tab.
+          <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 8 }}>
+            API URL used by this build: <code>{API_URL}</code>
+          </p>
+          <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 8 }}>
+            If that shows <code>localhost</code>, set <code>REACT_APP_API_URL</code> on Vercel to{' '}
+            <code>https://inventory-order-management-gjmc.onrender.com</code> and redeploy (no cache).
+            On Render set <code>CORS_ORIGINS</code> to your Vercel URL or <code>*</code>, then redeploy backend.
           </p>
         </div>
       </div>

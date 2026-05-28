@@ -14,20 +14,23 @@ app = FastAPI(
     version="1.0.0",
 )
 
-cors_origins = os.getenv("CORS_ORIGINS", "*")
-allow_origins = (
-    [origin.strip() for origin in cors_origins.split(",")]
-    if cors_origins != "*"
-    else ["*"]
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allow_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+cors_origins = os.getenv("CORS_ORIGINS", "*").strip()
+if cors_origins == "*":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[o.strip() for o in cors_origins.split(",") if o.strip()],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
 def init_db():
