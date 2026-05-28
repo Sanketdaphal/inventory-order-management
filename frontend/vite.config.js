@@ -7,7 +7,8 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     envPrefix: ['REACT_APP_', 'VITE_'],
     server: {
-      port: 3000,
+      port: 5173,
+      open: true,
     },
     build: {
       outDir: 'build',

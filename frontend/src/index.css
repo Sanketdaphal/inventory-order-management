@@ -1,12 +1,56 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+:root {
+  --bg: #EAEDED;
+  --bg-white: #ffffff;
+  --bg-surface: #F0F2F2;
+  --sidebar-bg: #131921;
+  --sidebar-hover: #232F3E;
+  --sidebar-active: #37475A;
+  --border: #D5D9D9;
+  --border-strong: #A2A6AC;
+  --text: #0F1111;
+  --text-muted: #565959;
+  --text-dim: #8D9696;
+  --orange: #FF9900;
+  --orange-hover: #E47911;
+  --orange-soft: rgba(255, 153, 0, 0.12);
+  --orange-dark: #C45500;
+  --link: #007185;
+  --link-hover: #C7511F;
+  --green: #067D62;
+  --green-soft: #E6F4F1;
+  --red: #B12704;
+  --red-soft: #FEF0EC;
+  --yellow-soft: #FFF9E6;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --shadow: 0 2px 5px rgba(15,17,17,0.15);
+  --shadow-lg: 0 4px 16px rgba(15,17,17,0.18);
+  --font: 'Amazon Ember', 'Inter', system-ui, sans-serif;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: #f1f5f9;
-  color: #0f172a;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
 }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--bg-surface);
+  color: var(--orange-dark);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+input, select, textarea, button { font-family: var(--font); }
+::selection { background: var(--orange-soft); }
